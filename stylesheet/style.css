@@ -1,0 +1,236 @@
+html
+{
+	padding:0;
+	margin:0;
+}
+
+body
+{
+	text-align: left;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	margin:0;
+	padding:0;
+	background-color:white;
+	min-width:850px;
+	color:#666666;
+}
+
+h1
+{
+font-family:Verdana, Geneva, sans-serif;
+text-align:left;
+font-size:22px;
+font-weight:bold;
+color:#333333;
+margin:0;
+}
+
+h2
+{
+font-family:Verdana, Geneva, sans-serif;
+text-align:left;
+font-size:24px;
+font-weight:bold;
+color:#333333;
+margin:0;
+}
+
+h3
+{
+font-family:Verdana, Geneva, sans-serif;
+text-align: left;
+font-size: 17px;
+font-weight:bold;
+color:#ffffff;
+padding:0;
+}
+
+h4
+{
+text-align:left;
+font-size:18px;
+color:#cccccc;
+margin: 3px 0 3px 0;
+font-size:15px;
+}
+
+
+#map
+{
+	height:100%;
+	width:80%; 
+	padding:0;
+	margin:0;
+	float:left;
+}
+
+#results
+{
+	width:20%;
+	margin:0;
+	padding:0;
+	float:right;
+	background-color:white;
+	height:100%;
+	overflow:scroll;
+}
+
+span.small
+{
+	font-size:10px;
+	color:#555555;
+}
+
+span.blue
+{
+	color:#3366FF;
+}
+
+span.purple
+{
+	color:#CC00CC;
+}
+
+span.yellow
+{
+	color:#EAC117;
+}
+
+span.orange
+{
+	color:orange;
+}
+
+span.title
+{
+	text-decoration:underline;
+	display:block;
+	font-size:14px;
+}
+
+table
+{
+	font-size:13px;
+	width:200px;
+}
+
+table.wind
+{
+	width:250px;
+}
+
+#legend
+{
+	position:absolute;
+	left:10px;
+	bottom:50px;
+	background-color:#ffffff;
+	z-index:999;
+	font-size:10px;
+	padding:5px;
+}
+
+#legend img
+{
+	float:left;
+	margin:2px;
+}
+
+#legend ul
+{
+	margin:0;
+	float:left;
+	padding:0;
+	list-style-type:none;
+}
+
+#legend li
+{
+	height:35px;
+	text-align:left;
+	padding:0;
+}
+
+#credits
+{
+	position:absolute;
+	left:0px;
+	bottom:0px;
+	background-color:#ffffff;
+	z-index:999;
+	font-size:10px;
+	padding:5px;
+}
+
+#credits p
+{
+	margin:5px;
+}
+
+td.alternate
+{
+	background-color:#F0F0F0 ;
+}
+
+table
+{
+	width: 100%;
+	border:3px solid #cccccc;
+	padding:0;
+	border-collapse: collapse;
+}
+			
+td
+{
+	border:1px solid #cccccc;
+	padding:3px;
+}
+
+
+.site
+{
+	float:left;
+	width:100%;
+	padding:0 0 25px 0;
+}
+
+#wrapper
+{
+	width:900px;
+	margin:30px auto 0 auto;
+	padding:25px 0 0 0;
+	background-color:#ffffff;
+	border:2px solid #333333;
+	border-radius:15px;
+	background-color:#ffffff;
+	overflow:auto;
+}
+
+#content
+{
+	float:left;
+	margin:0;
+	padding: 0 25px 0 25px;
+	width:850px;
+}
+
+#content ul
+{
+	list-style-type:none;
+	padding:0;
+	margin:35px 0 0 0;
+	float:right;
+}
+		
+#content li
+{
+	display:inline;
+	margin-right:10px;
+}
+
+p
+{
+text-align:left;
+font-size:12px;
+}
