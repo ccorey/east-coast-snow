@@ -1,14 +1,7 @@
-
-
 <?php
 
-	/*
-		* Script that parses the snowfall data from
-		* the NWS and echos it out as a geojson object
-		* on the fly for a mapbox map
-	*/
+	error_reporting(0);
 
-	//Helper function
 	function getFormatedTime($time){
 		$returnValue = '';
 
@@ -31,17 +24,14 @@
 	$time = getFormatedTime(date('H'));
 	$region = $_GET['region'];
 
-	// Get data from the NWS
 	$csv = file_get_contents('http://www.nohrsc.noaa.gov/nsa/discussions_text/' . $region . '/snowfall/' . date('Ym') . '/snowfall_' . $date . $time . '_e.txt');
 	$rows = explode("\n", $csv);
 	
 	$featureCollection = [];
 
-	//Get the first 2 rows out of the way
 	$disclaimer = array_shift($rows);
 	$headers = explode("|", array_shift($rows));
 
-	//Now loop through data and parse into the geoJson format
 	foreach($rows as $row){
 		
 		$station = [];
@@ -62,7 +52,6 @@
 		}
 	}
 
-	//Return geojson to be shown in map
 	echo json_encode(
 		[
 			'type'=>'FeatureCollection',

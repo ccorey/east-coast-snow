@@ -21,6 +21,10 @@
 		<script src='js/functions.js'></script>
 
 		<style type="text/css">
+			.no-padding{
+				padding-left:0;
+				padding-right:0;
+			}
 		</style>
 	</head>
 	<body>
@@ -32,16 +36,23 @@
 				<li><img src = "images/orange.png" alt = "" height = "25px" /> 12 - 17 inches</li>
 				<li><img src = "images/yellow.png" alt = "" height = "25px" /> 6 - 11 inches</li>
 				<li><img src = "images/green.png" alt = "" height = "25px" /> 2 - 5 inches</li>
-				<li><img src = "images/grey.png" alt = "" height = "25px" /> 0.5 - 2 inches</li>
+				<li><img src = "images/gray.png" alt = "" height = "25px" /> 0.5 - 2 inches</li>
 			</ul>			
 		</div>
-
 		<div id = "credits">
 			<p>Sources: NWS, Mapbox</p>
 		</div>
 
-		<div id = "map"></div>
-		<div id = "results"></div>
+		<div class = "container-fluid no-padding">
+			<div class = "row-fluid">
+				<div class = "col-md-8 no-padding">
+					<div id = "map"></div>
+				</div>
+				<div class = "col-md-4 no-padding">
+					<div id = "results"></div>
+				</div>
+			</div>
+		</div>
 		
 		<script>
 
@@ -69,8 +80,6 @@
 			};
 
 			var layerGroup = L.layerGroup();
-
-			//Would like to make this a little more dynamic instead of hard coding each region as a layer
 
 			var northeastWeatherStationLayer = L.mapbox.featureLayer().loadURL('./snowfall-csv.php?region=Northeast').on('ready', function(layer) {
 				//Color code marker, create popup and build label for each station
@@ -228,8 +237,9 @@
 		    //When user zooms check to see if table needs to be shown
 			map.on('moveend', function(){ 
 				checkZoom();
-
 		    });
+
+			map.scrollZoom.disable();
 			
 		
 		</script>

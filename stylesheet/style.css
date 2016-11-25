@@ -59,7 +59,7 @@ font-size:15px;
 #map
 {
 	height:100%;
-	width:80%; 
+	width:100%; 
 	padding:0;
 	margin:0;
 	float:left;
@@ -67,7 +67,7 @@ font-size:15px;
 
 #results
 {
-	width:20%;
+	width:100%;
 	margin:0;
 	padding:0;
 	float:right;
