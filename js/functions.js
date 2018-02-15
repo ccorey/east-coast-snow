@@ -18,61 +18,51 @@ function getColor(amount){
 	return color;
 }
 
+//Get color used to symbolize the marker based on snow amount
+function getColorClass(amount){
+	var color;
+
+	if(amount >= 24)
+		color = 'dark-red'; //'#900000'; //red
+	else if(amount >= 18)
+		color = 'red'; //'#FF0000'; //red
+	else if(amount >= 12)
+		color = 'orange'; //'#ff9900'; //orange
+	else if(amount >= 6)
+		color = 'yellow'; //'#FFFF00'; //yellow
+	else if(amount >= 2)
+		color = 'green'; //'#66ff00'; //green
+	else if (amount >= .5)
+		color = 'grey'; //'#888888'; //grey 
+	else if (amount > 0)
+		color = 'light-grey'; //'#888888'; //grey
+	else
+		color = 'transparent';
+		//'#cccccc'; //grey 
+
+	return color;
+}
+
 //Write table of station data to results div
 function writeResults(){
 	bounds = map.getBounds();
 
     var html = "<table class = 'table table-striped'><tr><td><b>Location</b></td><td><b>Inches of snow</b></td></tr>";
 
-	northeastWeatherStationLayer.eachLayer(function(marker){ 
+	mapLayers.forEach(function(item){
+		layer = item.layer;
+			layer.eachLayer(function(marker){ 
+				if (bounds.contains(marker.getLatLng())) {
+					html += "<tr><td>" + marker.feature.properties.Name + "</td><td>" + String(marker.feature.properties.Amount) + "</td></tr>";
+					//northeastWeatherStationLayer.addTo(map);
+				}
 
-		if (bounds.contains(marker.getLatLng())) {
-            html += "<tr><td>" + marker.feature.properties.Name + "</td><td>" + String(marker.feature.properties.Amount) + "</td></tr>";
-         	northeastWeatherStationLayer.addTo(map);
-        }
-
-	});
-
-	midwestWeatherStationLayer.eachLayer(function(marker){ 
-
-		if (bounds.contains(marker.getLatLng())) {
-            html += "<tr><td>" + marker.feature.properties.Name + "</td><td>" + String(marker.feature.properties.Amount) + "</td></tr>"; 
-            midwestWeatherStationLayer.addTo(map);
-        }
-
-	});
-
-	easternCoastalWeatherStationLayer.eachLayer(function(marker){ 
-
-		if (bounds.contains(marker.getLatLng())) {
-            html += "<tr><td>" + marker.feature.properties.Name + "</td><td>" + String(marker.feature.properties.Amount) + "</td></tr>"; 
-            easternCoastalWeatherStationLayer.addTo(map);
-        }
-
-	});
-
-	southernGreatLakesWeatherStationLayer.eachLayer(function(marker){ 
-
-		if (bounds.contains(marker.getLatLng())) {
-            html += "<tr><td>" + marker.feature.properties.Name + "</td><td>" + String(marker.feature.properties.Amount) + "</td></tr>";
-         	southernGreatLakesWeatherStationLayer.addTo(map);
-        }
-
-	});
-
-	southernApplatiaWeatherStationLayer.eachLayer(function(marker){ 
-
-		if (bounds.contains(marker.getLatLng())) {
-            html += "<tr><td>" + marker.feature.properties.Name + "</td><td>" + String(marker.feature.properties.Amount) + "</td></tr>";
-         	southernApplatiaWeatherStationLayer.addTo(map);
-        }
-
-	});
+			});
+		}
+	);
 
 	html += "</table>";
-				//fade affect for the results div
 			
-
 	document.getElementById('results').innerHTML = html;
 
 	$("#results").fadeIn("900");

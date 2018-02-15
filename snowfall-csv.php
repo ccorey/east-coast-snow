@@ -6,7 +6,7 @@
 	* Json data is returned.
 	*/
 
-	error_reporting(0);
+	//error_reporting(E_ALL);
 	date_default_timezone_set('Europe/London');
 
 	//Sheets from the NWS are broken into 6 hour increments
@@ -44,7 +44,7 @@
 
 		//Properties
 		$station['properties'] = array_combine($headers, explode("|", $row));
-		if(!empty($station['properties']['Longitude']) && $station['properties']['Amount'] >= 0.5 ){
+		if(!empty($station['properties']['Longitude'])){
 
 			//Geometry
 			$station['type'] = 'Feature';

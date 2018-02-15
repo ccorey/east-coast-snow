@@ -25,6 +25,48 @@
 				padding-left:0;
 				padding-right:0;
 			}
+
+			.my-icon {
+				border:1px solid #333333;
+				border-radius: 100%;
+				width: 15px;
+				height: 15px;
+				text-align: center;
+				line-height: 15px;
+				color: white;
+			}
+
+			.dark-red{
+				background-color: #900000;
+			} 
+			.red{
+				background-color: #FF0000;
+			}
+			.orange{
+				background-color: #ff9900;
+			}
+			.yellow{
+				background-color: #FFFF00;
+			}
+			.green{
+				background-color: #66ff00;
+			}
+			.grey{
+				background-color: #888888;
+			}
+			.light-grey{
+				background-color: #cccccc;
+			}
+			.transparent{
+				background-color: #F5F5F5;
+			}
+
+			.legend-item{
+				display:inline-block; 
+				float:left;
+				margin-right:5px;
+			}
+
 		</style>
 	</head>
 	<body>
@@ -32,11 +74,14 @@
 		<div id = "legend">
 			<ul>
 				<li><strong>Snowfall Key (24h)</strong></li>
-				<li><img src = "images/red.png" alt = "" height = "25px" /> >= 18 inches</li>
-				<li><img src = "images/orange.png" alt = "" height = "25px" /> 12 - 17 inches</li>
-				<li><img src = "images/yellow.png" alt = "" height = "25px" /> 6 - 11 inches</li>
-				<li><img src = "images/green.png" alt = "" height = "25px" /> 2 - 5 inches</li>
-				<li><img src = "images/gray.png" alt = "" height = "25px" /> 0.5 - 2 inches</li>
+				<li><div class = "my-icon dark-red legend-item"></div> >= 24 inches</li>
+				<li><div class = "my-icon red legend-item"></div> 18 - 24 inches</li>
+				<li><div class = "my-icon orange legend-item"></div> 12 - 17 inches</li>
+				<li><div class = "my-icon yellow legend-item"></div> 6 - 11 inches</li>
+				<li><div class = "my-icon green legend-item"></div> 2 - 5 inches</li>
+				<li><div class = "my-icon grey legend-item"></div> .5 - 2 inches</li>
+				<li><div class = "my-icon light-grey legend-item"></div> 0 - .5</li>
+				<li><div class = "my-icon transparent legend-item"></div> 0</li>
 			</ul>			
 		</div>
 		<div id = "credits">
@@ -58,7 +103,7 @@
 
 			//Initialize map, centering on the Bozeman area
 			L.mapbox.accessToken = 'pk.eyJ1IjoiY2NyaWZ0IiwiYSI6IlFoTklheHMifQ.FiWG45_BS8q6y2fX-OiKRQ';
-			var map = L.mapbox.map('map').setView([42.8500, -72.5822], 7);
+			var map = L.mapbox.map('map').setView([42.8500, -71.5822], 7);
 
 			// Topographic tile layer
 			var terrainLayer = L.mapbox.tileLayer('ccrift.ko7g3fim');
@@ -73,6 +118,15 @@
 				transparent: true,
 				attribution: "Weather data © 2012 IEM Nexrad"
 			});
+
+			var regions = [
+				//['National', 'National']
+				['Eastern_Coastal', 'Eastern Coastal'],
+				['Midwest', 'Midwest'],
+				['Northeast', 'Northeast'],
+				['Southern_Great_Lakes', 'Southern Great Lakes'],
+				['Southern_Appalachia', 'Southern Appalachia']
+			];
 			
 			var labelMarkerOptions = {
 			        opacity: 0,
@@ -80,140 +134,39 @@
 			};
 
 			var layerGroup = L.layerGroup();
+			window.mapLayers = [];
+			window.featureCount = 0;
 
-			var northeastWeatherStationLayer = L.mapbox.featureLayer().loadURL('./snowfall-csv.php?region=Northeast').on('ready', function(layer) {
-				//Color code marker, create popup and build label for each station
+			regions.forEach(function(item){
+				var key = item[1].toString();
+				mapLayers.push( 
+					{ name : key,
+					layer: L.mapbox.featureLayer().loadURL('./snowfall-csv.php?region=' + item[0]).on('ready', function(layer) {
+						//Color code marker, create popup and build label for each station
 
-		        this.eachLayer(function(marker) {
-		        	var station = marker.feature.properties;
-		        	var color = getColor(station.Amount);
-		            
-		            marker.setIcon(L.mapbox.marker.icon({
-		                'marker-color': color,
-		                'marker-size': 'small'
+						this.eachLayer(function(marker) {
+							var station = marker.feature.properties;
+							var colorClass = getColorClass(station.Amount);
+							featureCount += 1;
 
-		            }));
-
-		        	marker.bindLabel(
-		        		(String(station.Amount) + '" at Elevation: ' + String(station.Elevation)),
-		        		{
-		        			noHide:false,
-		        			direction:'left'
-		        		}
-	        		);
-
-	        	})
-
-	        	//northeastWeatherStationLayer.addTo(layerGroup);
-
-		    }).addTo(map);
-
-			var southernApplatiaWeatherStationLayer = L.mapbox.featureLayer().loadURL('./snowfall-csv.php?region=Southern_Appalachia').on('ready', function(layer) {
-				//Color code marker, create popup and build label for each station
-
-		        this.eachLayer(function(marker) {
-		        	var station = marker.feature.properties;
-		        	var color = getColor(station.Amount);
-
-		            marker.setIcon(L.mapbox.marker.icon({
-		                'marker-color': color,
-		                'marker-size': 'small'
-
-		            }));
-
-		        	marker.bindLabel(
-		        		(String(station.Amount) + '" at Elevation: ' + String(station.Elevation)),
-		        		{
-		        			noHide:false,
-		        			direction:'left'
-		        		}
-	        		);
-
-	        	})
-
-	        	//southernApplatiaWeatherStationLayer.addTo(layerGroup);
-
-		    });
-
-			var easternCoastalWeatherStationLayer = L.mapbox.featureLayer().loadURL('./snowfall-csv.php?region=Eastern_Coastal').on('ready', function(layer) {
-				//Color code marker, create popup and build label for each station
-
-		        this.eachLayer(function(marker) {
-		        	var station = marker.feature.properties;
-		        	var color = getColor(station.Amount);
-
-		            marker.setIcon(L.mapbox.marker.icon({
-		                'marker-color': color,
-		                'marker-size': 'small'
-
-		            }));
-
-		        	marker.bindLabel(
-		        		(String(station.Amount) + '" at Elevation: ' + String(station.Elevation)),
-		        		{
-		        			noHide:false,
-		        			direction:'left'
-		        		}
-	        		);
-
-	        	})
-
-		       // easternCoastalWeatherStationLayer.addTo(layerGroup);
-
-		    });
-			
-			var midwestWeatherStationLayer = L.mapbox.featureLayer().loadURL('./snowfall-csv.php?region=Midwest').on('ready', function(layer) {
-				//Color code marker, create popup and build label for each station
-
-		        this.eachLayer(function(marker) {
-		        	var station = marker.feature.properties;
-		        	var color = getColor(station.Amount);
-
-		            marker.setIcon(L.mapbox.marker.icon({
-		                'marker-color': color,
-		                'marker-size': 'small'
-
-		            }));
-
-		        	marker.bindLabel(
-		        		(String(station.Amount) + '" at Elevation: ' + String(station.Elevation)),
-		        		{
-		        			noHide:false,
-		        			direction:'left'
-		        		}
-	        		);
-
-	        	})
-
-	        	//midwestWeatherStationLayer.addTo(layerGroup);
-		    });
-
-			var southernGreatLakesWeatherStationLayer = L.mapbox.featureLayer().loadURL('./snowfall-csv.php?region=Southern_Great_Lakes').on('ready', function(layer) {
-				//Color code marker, create popup and build label for each station
-
-		        this.eachLayer(function(marker) {
-		        	var station = marker.feature.properties;
-		        	var color = getColor(station.Amount);
-
-		            marker.setIcon(L.mapbox.marker.icon({
-		                'marker-color': color,
-		                'marker-size': 'small'
-
-		            }));
-
-		        	marker.bindLabel(
-		        		(String(station.Amount) + '" at Elevation: ' + String(station.Elevation)),
-		        		{
-		        			noHide:false,
-		        			direction:'left'
-		        		}
-	        		);
-
-	        	})
-
-				//southernGreatLakesWeatherStationLayer.addTo(layerGroup);
-
-		    });
+							marker.setIcon(L.divIcon({
+								className: 'my-icon ' + colorClass, // class name to style
+								//html: station.Amount, // add content inside the marker, in this case a star
+								iconSize: null // size of icon, use null to set the size in CSS
+							}));
+							
+							marker.bindLabel(
+								(String(station.Amount) + '" at Elevation: ' + String(station.Elevation)),
+								{
+									noHide:false,
+									direction:'left'
+								}
+							);
+						})
+					}).addTo(map)
+					}
+				)
+			});
 
 			//Create menu to toggle base maps
 	  		var baseMaps = {
@@ -223,13 +176,14 @@
 			
 			//Create Menu to toggle layers on and off
 			var features = {
-				"Current Radar": nexrad,
-				"Northeast": northeastWeatherStationLayer,
-				"Southern Appalatia": southernApplatiaWeatherStationLayer,
-				"Eastern Coastal": easternCoastalWeatherStationLayer,
-				"Midwest": midwestWeatherStationLayer,
-				"Southern Great Lakes": southernGreatLakesWeatherStationLayer
+				"Current Radar": nexrad
 			};
+
+			mapLayers.forEach(function(mapLayer){
+				var key = mapLayer.name.toString();
+				var layer = mapLayer.layer;
+				features[key] = layer;
+			});
 			
 			//Add Menu Items
 			layerControl = new L.control.layers(baseMaps, features, {collapsed: false}).addTo(map);
@@ -239,7 +193,7 @@
 				checkZoom();
 		    });
 
-			map.scrollZoom.disable();
+			//map.scrollZoom.disable();
 			
 		
 		</script>
